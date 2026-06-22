@@ -1,10 +1,13 @@
 """
 Kaggle Notebook 专用 — 全量训练 + 推理一体化脚本。
 
-用法：直接上传所有项目文件到 Kaggle，在 Notebook 中运行：
-    %run kaggle_train.py
+用法：在 Kaggle Notebook 中通过环境变量设置路径后运行：
 
-或在 Notebook cell 中直接执行此文件的内容。
+    import os
+    os.environ["TRAIN_PATH"]  = "/kaggle/input/leash-belka/train.parquet"
+    os.environ["TEST_PATH"]   = "/kaggle/input/leash-belka/test.parquet"
+    os.environ["OUTPUT_DIR"]  = "/kaggle/working"
+    %run kaggle_train.py
 
 数据路径说明：
     先在 Kaggle Notebook 的 "Add Input" 中添加：
@@ -40,15 +43,16 @@ from utils import (
 )
 
 # ============================================================
-# Kaggle 路径配置（直接修改这里的参数）
+# Kaggle 路径配置（通过环境变量设置，不修改 .py 文件）
+# 在 Notebook 中用 os.environ["KEY"] = "value" 覆盖
 # ============================================================
 
 # 数据路径（Kaggle 默认）
-TRAIN_PATH = "/kaggle/input/leash-belka/train.parquet"
-TEST_PATH = "/kaggle/input/leash-belka/test.parquet"
+TRAIN_PATH = os.environ.get("TRAIN_PATH", "/kaggle/input/leash-belka/train.parquet")
+TEST_PATH = os.environ.get("TEST_PATH", "/kaggle/input/leash-belka/test.parquet")
 
 # 输出路径（Kaggle 工作目录）
-OUTPUT_DIR = "/kaggle/working"
+OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "/kaggle/working")
 CKPT_DIR = os.path.join(OUTPUT_DIR, "ckpt")
 
 # 创建目录
